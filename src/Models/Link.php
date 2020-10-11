@@ -20,6 +20,8 @@ use SilverStripe\View\Requirements;
 class Link extends DataObject implements JsonData, Type
 {
 
+    private static $table_name = 'Link';
+
     private static $db = [
         'Title' => 'Varchar',
         'OpenInNew' => 'Boolean'
