@@ -10,6 +10,8 @@ namespace SilverStripe\Link\Models;
 class ExternalLink extends Link
 {
 
+    private static $table_name = 'LinkExternal';
+
     private static $db = [
         'ExternalUrl' => 'Varchar'
     ];

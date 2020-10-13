@@ -14,6 +14,8 @@ use SilverStripe\Link\Type\Type;
 class FileLink extends Link
 {
 
+    private static $table_name = 'LinkFile';
+
     private static $has_one = [
         'File' => File::class
     ];
