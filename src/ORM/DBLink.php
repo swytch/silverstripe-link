@@ -27,6 +27,20 @@ class DBLink extends DBJson
         }
     }
 
+    /**
+     * Return Link object for use in template $Link.LinkObject.URL
+     *
+     * @return mixed
+     */
+    public function getLinkObject()
+    {
+        $value = $this->getValue();
+        if ($value) {
+            $type = Registry::singleton()->byKey($value['typeKey']);
+            return $type->loadLinkData($value);
+        }
+    }
+
     public function scaffoldFormField($title = null, $params = null)
     {
         return LinkField::create($this->getName(), $this->getValue());
