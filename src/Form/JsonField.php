@@ -4,6 +4,7 @@ namespace SilverStripe\Link\Form;
 
 use InvalidArgumentException;
 use SilverStripe\Forms\FormField;
+use SilverStripe\Link\JsonData;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\DataObjectInterface;
 
@@ -34,6 +35,7 @@ abstract class JsonField extends FormField
     {
         // Check required relation details are available
         $fieldname = $this->getName();
+
         if (!$fieldname) {
             return $this;
         }
@@ -45,6 +47,7 @@ abstract class JsonField extends FormField
             /** @var JsonData|DataObject $jsonDataObject */
 
             $jsonDataObjectID = $record->{"{$fieldname}ID"};
+
             if ($jsonDataObjectID && $jsonDataObject = $record->$fieldname) {
                 if ($value) {
                     $jsonDataObject = $jsonDataObject->setData($value);
@@ -59,7 +62,6 @@ abstract class JsonField extends FormField
                 $jsonDataObject->write();
                 $record->{"{$fieldname}ID"} = $jsonDataObject->ID;
             }
-
         } elseif ((DataObject::getSchema()->databaseField(get_class($record), $fieldname))) {
             $record->{$fieldname} = $value;
         }
@@ -69,26 +71,26 @@ abstract class JsonField extends FormField
 
     protected function parseString(string $value): ?array
     {
-        if (empty($value)) {
+        if (!$value) {
             return null;
         }
 
         $data = json_decode($value, true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            var_dump($value);
-            throw new InvalidArgumentException(sprintf(
-                '%s: Could not parse provided JSON string. Failed with "%s"',
-                __CLASS__,
-                json_last_error_msg())
+            throw new InvalidArgumentException(
+                sprintf(
+                    '%s: Could not parse provided JSON string. Failed with "%s"',
+                    static::class,
+                    json_last_error_msg()
+                )
             );
         }
 
-        if (empty($data)) {
+        if (!$data) {
             return null;
         }
 
         return $data;
     }
-
 }

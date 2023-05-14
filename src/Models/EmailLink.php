@@ -3,6 +3,7 @@
 namespace SilverStripe\Link\Models;
 
 use SilverStripe\Forms\EmailField;
+use SilverStripe\Forms\FieldList;
 
 /**
  * A link to an Email address.
@@ -11,21 +12,18 @@ use SilverStripe\Forms\EmailField;
  */
 class EmailLink extends Link
 {
+    private static string $table_name = 'LinkField_EmailLink';
 
-    private static $table_name = 'LinkEmail';
-
-    private static $db = [
-        'Email' => 'Varchar(255)'
+    private static array $db = [
+        'Email' => 'Varchar(255)',
     ];
-
 
     public function generateLinkDescription(array $data): string
     {
         return isset($data['Email']) ? $data['Email'] : '';
-
     }
 
-    public function getCMSFields()
+    public function getCMSFields(): FieldList
     {
         $fields = parent::getCMSFields();
 
@@ -34,7 +32,7 @@ class EmailLink extends Link
         return $fields;
     }
 
-    public function getURL()
+    public function getURL(): string
     {
         return $this->Email ? sprintf('mailto:%s', $this->Email) : '';
     }

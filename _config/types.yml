@@ -16,3 +16,6 @@ SilverStripe\Link\Type\Registry:
     email:
       classname: SilverStripe\Link\Models\EmailLink
       enabled: true
+    phone:
+      classname: SilverStripe\Link\Models\PhoneLink
+      enabled: true

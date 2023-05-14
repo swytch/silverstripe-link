@@ -3,6 +3,7 @@
 namespace SilverStripe\Link\Type;
 
 use InvalidArgumentException;
+use LogicException;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Extensible;
 use SilverStripe\Core\Injector\Injectable;
@@ -19,7 +20,6 @@ class Registry
 
     private static $types = [];
 
-
     /**
      * Find the matching LinkType by its key or null it can't be found.
      * @param string $key
@@ -30,11 +30,13 @@ class Registry
     {
         /** @var array $types */
         $typeDefinitions = self::config()->get('types');
-        if (empty($typeDefinitions[$key])) {
+        $definition = $typeDefinitions[$key] ?? null;
+
+        if (!$definition) {
             return null;
         }
 
-        return $this->definitionToType($typeDefinitions[$key]);
+        return $this->definitionToType($definition);
     }
 
     /**
@@ -61,7 +63,7 @@ class Registry
      */
     public function keys(): array
     {
-
+        return [];
     }
 
     /**
@@ -69,13 +71,12 @@ class Registry
      */
     public function keysEnabledByDefault(): array
     {
-
+        return [];
     }
 
     public function init()
     {
-        foreach ($this->list() as $type)
-        {
+        foreach ($this->list() as $type) {
             $type->defineLinkTypeRequirements();
         }
     }
@@ -86,15 +87,17 @@ class Registry
      */
     private function definitionToType(array $def): Type
     {
-        if (empty($def['classname'])) {
-            throw new \LogicException(sprintf('%s: All types should reference a valid classname', __CLASS__));
+        $className = $def['classname'] ?? null;
+
+        if (!$className) {
+            throw new LogicException(sprintf('%s: All types should reference a valid classname', static::class));
         }
 
         /** @var Type $type */
-        $type = Injector::inst()->get($def['classname']);
+        $type = Injector::inst()->get($className);
 
         if (!$type instanceof Type) {
-            throw new \LogicException(sprintf('%s: %s is not a valid link type', __CLASS__, $def['classname']));
+            throw new LogicException(sprintf('%s: %s is not a valid link type', static::class, $className));
         }
 
         return $type;
@@ -103,6 +106,7 @@ class Registry
     public function keyByClassName(string $classname): ?string
     {
         $typeDefinitions = self::config()->get('types');
+
         foreach ($typeDefinitions as $key => $def) {
             if ($def['classname'] === $classname) {
                 return $key;

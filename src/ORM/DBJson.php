@@ -3,6 +3,7 @@
 namespace SilverStripe\Link\ORM;
 
 use SilverStripe\Core\Config\Config;
+use SilverStripe\Link\JsonData;
 use SilverStripe\ORM\DB;
 use SilverStripe\ORM\FieldType\DBField;
 
@@ -44,8 +45,9 @@ class DBJson extends DBField
         return null;
     }
 
-    public function setValue($value, $record = null, $markChanged = true) {
-        if (empty($value)) {
+    public function setValue($value, $record = null, $markChanged = true)
+    {
+        if (!$value) {
             $value = null;
         }
 

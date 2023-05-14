@@ -18,13 +18,13 @@ use SilverStripe\Link\Type\Registry;
  */
 class ModalController extends Extension
 {
-    private static $url_handlers = [
+    private static array $url_handlers = [
         'editorAnchorLink/$ItemID' => 'editorAnchorLink', // Matches LeftAndMain::methodSchema args
     ];
 
-    private static $allowed_actions = array(
+    private static array $allowed_actions = [
         'DynamicLink',
-    );
+    ];
 
     /**
      * Builds and returns the external link form
@@ -58,14 +58,15 @@ class ModalController extends Extension
     private function getContext(): array
     {
         $linkTypeKey = $this->getOwner()->controller->getRequest()->getVar('key');
-        if (empty($linkTypeKey)) {
-            throw new HTTPResponse_Exception(sprintf('key is required', __CLASS__), 400);
+
+        if (!$linkTypeKey) {
+            throw new HTTPResponse_Exception(sprintf('key for class "%s" is required', static::class), 400);
         }
 
         $type = Registry::singleton()->byKey($linkTypeKey);
 
-        if (empty($type)) {
-            throw new HTTPResponse_Exception(sprintf('%s is not a valid link type', 400));
+        if (!$type) {
+            throw new HTTPResponse_Exception(sprintf('%s is not a valid link type', $type), 400);
         }
 
         return [
@@ -84,8 +85,10 @@ class ModalController extends Extension
     {
         $data = [];
         $dataString = $this->getOwner()->controller->getRequest()->getVar('data');
+
         if ($dataString) {
             $parsedData = json_decode($dataString, true);
+
             if (json_last_error() === JSON_ERROR_NONE) {
                 $data = $parsedData;
             } else {
