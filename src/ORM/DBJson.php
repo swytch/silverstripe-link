@@ -6,6 +6,7 @@ use SilverStripe\Core\Config\Config;
 use SilverStripe\Link\JsonData;
 use SilverStripe\ORM\DB;
 use SilverStripe\ORM\FieldType\DBField;
+use SilverStripe\Model\ModelData;
 
 /**
  * Represents a DBField storing a JSON string
@@ -45,7 +46,7 @@ class DBJson extends DBField
         return null;
     }
 
-    public function setValue($value, $record = null, $markChanged = true)
+    public function setValue(mixed $value, ModelData|array|null $record = null, bool $markChanged = true): static
     {
         if (!$value) {
             $value = null;
