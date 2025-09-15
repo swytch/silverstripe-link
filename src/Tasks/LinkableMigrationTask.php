@@ -153,9 +153,9 @@ class LinkableMigrationTask extends BuildTask
 
     private static $segment = 'linkable-migration-task';
 
-    protected $title = 'Linkable Migration Task';
+    protected string $title = 'Linkable Migration Task';
 
-    protected $description = 'Truncate LinkField records and migrate from Linkable records';
+    protected static string $description = 'Truncate LinkField records and migrate from Linkable records';
 
     /**
      * @param HTTPRequest $request
