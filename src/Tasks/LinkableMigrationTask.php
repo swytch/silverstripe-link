@@ -16,6 +16,8 @@ use SilverStripe\ORM\DB;
 use SilverStripe\ORM\Queries\SQLInsert;
 use SilverStripe\ORM\Queries\SQLSelect;
 use SilverStripe\Versioned\Versioned;
+use Symfony\Component\Console\Input\InputInterface;
+use SilverStripe\PolyExecution\PolyOutput;
 
 /**
  * This migration task is provided without the promise that it will follow semver and without promising official support
@@ -162,7 +164,7 @@ class LinkableMigrationTask extends BuildTask
      * @return void
      * @throws Exception
      */
-    public function run($request): int
+    public function run(InputInterface $input, PolyOutput $output): int
     {
         // Check that we have matching Versioned states between Linkable and LinkField
         if (!$this->versionedStatusMatches()) {
