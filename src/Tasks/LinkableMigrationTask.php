@@ -159,12 +159,12 @@ class LinkableMigrationTask extends BuildTask
 
     protected static string $description = 'Truncate LinkField records and migrate from Linkable records';
 
-    /**
-     * @param HTTPRequest $request
-     * @return void
-     * @throws Exception
-     */
     public function run(InputInterface $input, PolyOutput $output): int
+    {
+        return $this->execute($input, $output);
+    }
+
+    public function execute(InputInterface $input, PolyOutput $output): int
     {
         // Check that we have matching Versioned states between Linkable and LinkField
         if (!$this->versionedStatusMatches()) {
