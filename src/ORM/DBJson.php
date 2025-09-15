@@ -41,7 +41,7 @@ class DBJson extends DBField
         DB::require_field($this->tableName, $this->name, $values);
     }
 
-    public function nullValue()
+    public function nullValue(): mixed
     {
         return null;
     }
