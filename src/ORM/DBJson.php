@@ -61,7 +61,7 @@ class DBJson extends DBField
         return parent::setValue($value, $record, $markChanged);
     }
 
-    public function prepValueForDB($value)
+    public function prepValueForDB($value): mixed
     {
         if (is_array($value) || $value instanceof JsonData) {
             $value = json_encode($value);
