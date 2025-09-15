@@ -162,7 +162,7 @@ class LinkableMigrationTask extends BuildTask
      * @return void
      * @throws Exception
      */
-    public function run($request): void
+    public function run($request): int
     {
         // Check that we have matching Versioned states between Linkable and LinkField
         if (!$this->versionedStatusMatches()) {
@@ -231,6 +231,7 @@ class LinkableMigrationTask extends BuildTask
 
             echo sprintf("%d records inserted, finished processing `%s`\r\n", $linkableResults->numRecords(), $table);
         }
+        return 0;
     }
 
     /**
