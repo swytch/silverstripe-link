@@ -16,7 +16,7 @@ class DBLink extends DBJson
      *
      * @return DBHTMLText
      */
-    public function forTemplate()
+    public function forTemplate(): string
     {
         $value = $this->getValue();
 
@@ -34,7 +34,7 @@ class DBLink extends DBJson
      *
      * @return mixed
      */
-    public function getLinkObject()
+    public function getLinkObject(): ?Link
     {
         $value = $this->getValue();
         if ($value) {
@@ -43,7 +43,7 @@ class DBLink extends DBJson
         }
     }
 
-    public function scaffoldFormField($title = null, $params = null)
+    public function scaffoldFormField($title = null, $params = null): ?FormField
     {
         return LinkField::create($this->getName(), $this->getValue());
     }
