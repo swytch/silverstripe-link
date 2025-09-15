@@ -70,7 +70,7 @@ class DBJson extends DBField
         return $value;
     }
 
-    public function scalarValueOnly()
+    public function scalarValueOnly(): bool
     {
         return false;
     }
