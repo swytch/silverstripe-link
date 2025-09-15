@@ -5,6 +5,8 @@ namespace SilverStripe\Link\ORM;
 use SilverStripe\Link\Type\Registry;
 use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\Link\Form\LinkField;
+use SilverStripe\Forms\FormField;
+use SilverStripe\Link\Models\Link;
 
 /**
  * Represent Link object stored as a JSON string
@@ -27,6 +29,7 @@ class DBLink extends DBJson
                 return $type->loadLinkData($value)->forTemplate();
             }
         }
+        return '';
     }
 
     /**
@@ -41,6 +44,7 @@ class DBLink extends DBJson
             $type = Registry::singleton()->byKey($value['typeKey']);
             return $type->loadLinkData($value);
         }
+        return null;
     }
 
     public function scaffoldFormField($title = null, $params = null): ?FormField
