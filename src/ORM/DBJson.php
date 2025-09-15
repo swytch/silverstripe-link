@@ -21,7 +21,7 @@ class DBJson extends DBField
         parent::__construct($name);
     }
 
-    public function requireField()
+    public function requireField(): void
     {
         $charset = Config::inst()->get('SilverStripe\ORM\Connect\MySQLDatabase', 'charset');
         $collation = Config::inst()->get('SilverStripe\ORM\Connect\MySQLDatabase', 'collation');
