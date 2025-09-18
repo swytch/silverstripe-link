@@ -227,7 +227,7 @@ class Link extends DataObject implements JsonData, Type
      */
     public function forTemplate(): string
     {
-        return $this->renderWith([self::class]);
+        return $this->renderWith([self::class])->getValue();
     }
 
     /**
