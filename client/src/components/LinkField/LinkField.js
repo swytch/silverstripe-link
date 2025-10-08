@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import React, { Fragment, useState } from 'react';
 import { compose } from 'redux';
 import { inject, injectGraphql, loadComponent } from 'lib/Injector';
@@ -68,9 +69,9 @@ const LinkField = ({ id, loading, Loading, data, LinkPicker, onChange, types, li
   const LinkModal = loadComponent(`LinkModal.${handlerName}`);
 
   return <Fragment>
-      <LinkPicker {...linkProps} />
-      <LinkModal {...modalProps} />
-    </Fragment>;
+    <LinkPicker {...linkProps} />
+    <LinkModal {...modalProps} />
+  </Fragment>;
 };
 
 const stringifyData = (Component) => (({ data, value, ...props }) => {
