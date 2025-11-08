@@ -146,12 +146,13 @@ class LinkMigrationTask extends BuildTask
         $this->insertBase($baseData, EmailLink::class);
 
         // Get email-specific data
-        $emailData = SQLSelect::create('*', 'LinkEmail')
+        $emailResult = SQLSelect::create('*', 'LinkEmail')
             ->setWhere(['ID' => $baseData['ID']])
-            ->execute()
-            ->first();
+            ->execute();
 
-        if ($emailData) {
+        // Get the first (and only) record
+        if ($emailResult->numRecords() > 0) {
+            $emailData = $emailResult->record();
             $assignments = $this->mapFields($emailData, $this->config()->get('email_mapping'));
             SQLInsert::create('LinkField_EmailLink', $assignments)->execute();
         }
@@ -163,12 +164,12 @@ class LinkMigrationTask extends BuildTask
         $this->insertBase($baseData, ExternalLink::class);
 
         // Get external-specific data
-        $externalData = SQLSelect::create('*', 'LinkExternal')
+        $externalResult = SQLSelect::create('*', 'LinkExternal')
             ->setWhere(['ID' => $baseData['ID']])
-            ->execute()
-            ->first();
+            ->execute();
 
-        if ($externalData) {
+        if ($externalResult->numRecords() > 0) {
+            $externalData = $externalResult->record();
             $assignments = $this->mapFields($externalData, $this->config()->get('external_mapping'));
             SQLInsert::create('LinkField_ExternalLink', $assignments)->execute();
         }
@@ -180,12 +181,12 @@ class LinkMigrationTask extends BuildTask
         $this->insertBase($baseData, FileLink::class);
 
         // Get file-specific data
-        $fileData = SQLSelect::create('*', 'LinkFile')
+        $fileResult = SQLSelect::create('*', 'LinkFile')
             ->setWhere(['ID' => $baseData['ID']])
-            ->execute()
-            ->first();
+            ->execute();
 
-        if ($fileData) {
+        if ($fileResult->numRecords() > 0) {
+            $fileData = $fileResult->record();
             $assignments = $this->mapFields($fileData, $this->config()->get('file_mapping'));
             SQLInsert::create('LinkField_FileLink', $assignments)->execute();
         }
@@ -207,12 +208,12 @@ class LinkMigrationTask extends BuildTask
         $this->insertBase($baseData, SiteTreeLink::class);
 
         // Get sitetree-specific data
-        $sitetreeData = SQLSelect::create('*', 'LinkSiteTree')
+        $sitetreeResult = SQLSelect::create('*', 'LinkSiteTree')
             ->setWhere(['ID' => $baseData['ID']])
-            ->execute()
-            ->first();
+            ->execute();
 
-        if ($sitetreeData) {
+        if ($sitetreeResult->numRecords() > 0) {
+            $sitetreeData = $sitetreeResult->record();
             $assignments = $this->mapFields($sitetreeData, $this->config()->get('sitetree_mapping'));
 
             // Handle anchor - remove leading # if present
