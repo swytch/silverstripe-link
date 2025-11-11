@@ -12,6 +12,8 @@ use SilverStripe\Link\Models\ExternalLink;
 use SilverStripe\Link\Models\FileLink;
 use SilverStripe\Link\Models\PhoneLink;
 use SilverStripe\Link\Models\SiteTreeLink;
+use Symfony\Component\Console\Input\InputInterface;
+use SilverStripe\PolyExecution\PolyOutput;
 
 class LinkMigrationTask extends BuildTask
 {
@@ -55,9 +57,9 @@ class LinkMigrationTask extends BuildTask
         'Anchor' => 'Anchor',
     ];
 
-    public function run($request)
+    public function run(InputInterface $input, PolyOutput $output)
     {
-        echo "Starting link migration...\n\n";
+        $output->writeln("Starting link migration...\n");
 
         // Truncate target tables
         $this->truncateTables();
@@ -70,7 +72,7 @@ class LinkMigrationTask extends BuildTask
             return;
         }
 
-        echo sprintf("Found %d links to migrate.\n\n", $links->numRecords());
+        $output->writeln(sprintf("Found %d links to migrate.\n", $links->numRecords()));
 
         $counts = [
             'email' => 0,
@@ -101,26 +103,28 @@ class LinkMigrationTask extends BuildTask
                 $this->migrateSiteTreeLink($link);
                 $counts['sitetree']++;
             } else {
-                echo "WARNING: Unknown link type: {$className} (ID: {$link['ID']})\n";
+                $output->writeln("WARNING: Unknown link type: {$className} (ID: {$link['ID']})");
                 $counts['unknown']++;
             }
         }
 
-        echo "\n=== Migration Summary ===\n";
-        echo "Email Links: {$counts['email']}\n";
-        echo "External Links: {$counts['external']}\n";
-        echo "File Links: {$counts['file']}\n";
-        echo "Phone Links: {$counts['phone']}\n";
-        echo "SiteTree Links: {$counts['sitetree']}\n";
+        $output->writeln("\n=== Migration Summary ===");
+        $output->writeln("Email Links: {$counts['email']}");
+        $output->writeln("External Links: {$counts['external']}");
+        $output->writeln("File Links: {$counts['file']}");
+        $output->writeln("Phone Links: {$counts['phone']}");
+        $output->writeln("SiteTree Links: {$counts['sitetree']}");
 
         if ($counts['unknown'] > 0) {
             echo "UNKNOWN Types: {$counts['unknown']}\n";
         }
 
-        echo "\nMigration complete!\n";
+        $output->writeln("\nMigration complete!");
+
+        return 0;
     }
 
-    protected function truncateTables(): void
+    protected function truncateTables(PolyOutput $output): void
     {
         echo "Truncating target tables...\n";
 
@@ -137,7 +141,7 @@ class LinkMigrationTask extends BuildTask
             DB::get_conn()->clearTable($table);
         }
 
-        echo "Tables truncated.\n\n";
+        $output->writeln("Tables truncated.\n");
     }
 
     protected function migrateEmailLink(array $baseData): void
@@ -192,14 +196,14 @@ class LinkMigrationTask extends BuildTask
         }
     }
 
-    protected function migratePhoneLink(array $baseData): void
+    protected function migratePhoneLink(array $baseData, PolyOutput $output): void
     {
         // Insert base record
         $this->insertBase($baseData, PhoneLink::class);
 
         // Note: No LinkPhone table found in your schema
         // If phone links exist, they might be in a different table
-        echo "WARNING: No phone link data table found for ID: {$baseData['ID']}\n";
+        $output->writeln("WARNING: No phone link data table found for ID: {$baseData['ID']}");
     }
 
     protected function migrateSiteTreeLink(array $baseData): void
