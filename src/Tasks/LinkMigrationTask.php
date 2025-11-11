@@ -68,8 +68,8 @@ class LinkMigrationTask extends BuildTask
         $links = SQLSelect::create('*', 'Link')->execute();
 
         if ($links->numRecords() === 0) {
-            echo "No links found to migrate.\n";
-            return;
+            $output->writeln("No links found to migrate.");
+            return 0;
         }
 
         $output->writeln(sprintf("Found %d links to migrate.\n", $links->numRecords()));
