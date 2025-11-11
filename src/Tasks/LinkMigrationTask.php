@@ -57,7 +57,7 @@ class LinkMigrationTask extends BuildTask
         'Anchor' => 'Anchor',
     ];
 
-    public function run(InputInterface $input, PolyOutput $output)
+    public function run(InputInterface $input, PolyOutput $output): int
     {
         $output->writeln("Starting link migration...\n");
 
