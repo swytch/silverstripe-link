@@ -17,7 +17,7 @@ class LinkMigrationTask extends BuildTask
 {
     private static $segment = 'migrate-links';
 
-    protected $title = 'Migrate Links to LinkField';
+    protected string $title = 'Migrate Links to LinkField';
 
     protected $description = 'Migrates Link/LinkEmail/LinkExternal/etc tables to new LinkField structure';
 
